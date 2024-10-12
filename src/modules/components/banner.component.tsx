@@ -1,49 +1,59 @@
-import React from "react";  
+'use client'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Image from "next/image";
+import KFP from "../../assets/kfp.jpg";
 
 export default function Banner() {
+    const [datos, setDatos] : any = useState([]);
+    const [cargando, setCargando] = useState(true);
+    const [error, setError] = useState(null);
+    useEffect(() => {
+        axios.get(process.env.MOVIES_URL || 'https://api.themoviedb.org/3/' + 'movie/top_rated?language=en-US&page=1', {
+            headers: {
+                'Authorization': `Bearer ${process.env.MOVIES_TOKEN || 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MTZiMjgyZDFiODYyMzhhYmJmZjI5YTJiNTljZDFkNiIsIm5iZiI6MTcyODY2MDg1My40NDI5OTQsInN1YiI6IjY3MDVkYmYwMDAwMDAwMDAwMDU4NzVjMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.yopjt2OmRAGl6A_leErMVzQgbr42zXFQVQ7M2Etppvw' }`
+            }
+        })
+        .then(response => {
+            setDatos(response.data);
+            setCargando(false);
+        })
+        .catch(err => {
+            setError(err);
+            setCargando(false);
+        });
+    }, []);
+
+    if (cargando) return <p>Cargando...</p>;
+    if (error) return <p>Error al cargar los datos.</p>;
+    const estiloFondo = {
+        backgroundImage: 'url(/src/assets/kfp.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        height: '50vh',
+        width: '100%',
+      };
+    
+
   return (
-    <div id="default-carousel" className="relative w-full" data-carousel="slide">
-        <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
-            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                <Image src="" width={1000} height={560} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..."/>
-            </div>
-            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                <Image src="" width={1000} height={560} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..."/>
-            </div>
-            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                <Image src="" width={1000} height={560} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..."/>
-            </div>
-            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                <Image src="" width={1000} height={560} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..."/>
-            </div>
-            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                <Image src="" width={1000} height={560} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..."/>
-            </div>
-        </div>
-        <div className="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
-            <button type="button" className="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
-            <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
-            <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
-            <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
-            <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5" data-carousel-slide-to="4"></button>
-        </div>
-        <button type="button" className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                <svg className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                </svg>
-                <span className="sr-only">Previous</span>
-            </span>
-        </button>
-        <button type="button" className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                <svg className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                </svg>
-                <span className="sr-only">Next</span>
-            </span>
-        </button>
+    <div className="relative mx-auto h-1/2 bg-cover bg-center" style={estiloFondo}>
+        <span>
+            {
+                <div className="flex flex-col position-absolute mt-8 left-0 w-full h-full">
+                    <h1 className="text-3xl font-bold text-white p-4 capitalize">{datos.results[0].title}</h1>
+                    <div className="flex items-center mt-2.5 mb-5 ">
+                        <div className="flex items-center space-x-1 rtl:space-x-reverse text-white">
+                            <p>{datos.results[0].overview}</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <span className="text-3xl font-bold text-gray-900 dark:text-white">{datos.results[0].vote_average}</span>
+                        <a href="#" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py">
+                        </a>
+                    </div>
+                </div>
+            }
+        </span>
     </div>
   );
 }

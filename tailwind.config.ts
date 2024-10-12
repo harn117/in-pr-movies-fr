@@ -15,6 +15,9 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      backgroundImage: {
+        'kfp': "url('/src/assets/kfp.jpg')",
+      }
     },
   },
   plugins: [
